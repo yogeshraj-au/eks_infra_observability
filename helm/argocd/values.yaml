@@ -1,0 +1,71 @@
+---
+server:
+  ingress:
+    # -- Enable an ingress resource for the Argo CD server
+    enabled: true
+    # -- Additional ingress annotations
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+      nginx.ingress.kubernetes.io/ssl-passthrough: "true"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTPS"
+
+    labels: {}
+    # -- Defines which ingress controller will implement the resource
+    ingressClassName: "egress-nginx"
+
+    # -- List of ingress hosts
+    ## Argo Ingress.
+    ## Hostnames must be provided if Ingress is enabled.
+    ## Secrets must be manually created in the namespace
+    hostname: argocd.coffeemart.xyz
+
+    # -- List of ingress paths
+    paths:
+      - /
+    # -- Ingress path type. One of `Exact`, `Prefix` or `ImplementationSpecific`
+    pathType: Prefix
+    # -- Additional ingress paths
+    extraPaths: []
+      # - path: /*
+      #   pathType: Prefix
+      #   backend:
+      #     service:
+      #       name: ssl-redirect
+      #       port:
+      #         name: use-annotation
+
+    # -- Ingress TLS configuration
+    tls: true
+
+    # -- Uses `server.service.servicePortHttps` instead `server.service.servicePortHttp`
+    https: true
+
+    # Dedicated gRPC ingress for ingress controllers that supports only single backend protocol per Ingress resource
+  # Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/#option-2-multiple-ingress-objects-and-hosts
+  ingressGrpc:
+    # -- Enable an ingress resource for the Argo CD server for dedicated [gRPC-ingress]
+    enabled: true
+    # -- Additional ingress annotations for dedicated [gRPC-ingress]
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    # -- Additional ingress labels for dedicated [gRPC-ingress]
+    labels:
+    # -- Defines which ingress controller will implement the resource [gRPC-ingress]
+    ingressClassName: "egress-nginx"
+
+    # -- Argo CD server hostname for dedicated [gRPC-ingress]
+    # @default -- `""` (defaults to grpc.`server.ingress.hostname`)
+    hostname: grpc.argocd.coffeemart.xyz
+
+    # -- Argo CD server ingress path for dedicated [gRPC-ingress]
+    path: /
+
+    # -- Ingress path type for dedicated [gRPC-ingress]. One of `Exact`, `Prefix` or `ImplementationSpecific`
+    pathType: Prefix
+
+    # -- Enable TLS configuration for the hostname defined at `server.ingressGrpc.hostname`
+    ## TLS certificate will be retrieved from a TLS secret with name: `argocd-server-grpc-tls`
+    tls: true
+
+extraArgs:
+  - "--grpc"

@@ -1,0 +1,22 @@
+---
+nginx:
+  ingress:
+    # -- Specifies whether an ingress for the nginx should be created
+    enabled: true
+    # -- Ingress Class Name. MAY be required for Kubernetes versions >= 1.18
+    ingressClassName: egress-nginx
+    # -- Annotations for the nginx ingress
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    # -- Hosts configuration for the nginx ingress
+    hosts:
+      - host: mimir.coffeemart.xyz
+        paths:
+          - path: /
+            # -- pathType (e.g. ImplementationSpecific, Prefix, .. etc.) might also be required by some Ingress Controllers
+            pathType: Prefix
+    # -- TLS configuration for the nginx ingress
+    tls:
+      - secretName: mimir-nginx-tls
+        hosts:
+          - mimir.coffeemart.xyz

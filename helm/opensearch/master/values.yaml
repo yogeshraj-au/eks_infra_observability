@@ -1,0 +1,38 @@
+ clusterName: "opensearch-cluster"
+
+ nodeGroup: "master"
+
+ masterService: "opensearch-cluster-master"
+
+ roles:
+   - master
+
+ replicas: 1
+
+ opensearchJavaOpts: "-Xmx512M -Xms512M"
+
+ resources:
+   requests:
+     cpu: "500m"
+     memory: "500Mi"
+
+ image:
+   repository: "docker.io/opensearchproject/opensearch"
+  # override image tag, which is .Chart.AppVersion by default
+   tag: ""
+   pullPolicy: "IfNotPresent"
+
+ ingress:
+   enabled: true
+   ingressClassName: egress-nginx
+
+   annotations:
+     cert-manager.io/cluster-issuer: letsencrypt-prod
+
+   path: /
+   hosts:
+     - opensearch.coffeemart.xyz
+   tls:
+     - secretName: opensearch-tls
+       hosts:
+         - opensearch.coffeemart.xyz
