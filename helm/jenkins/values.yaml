@@ -1,0 +1,33 @@
+---
+controller:
+  ingress:
+    enabled: true
+    # Override for the default paths that map requests to the backend
+    paths:
+    # - backend:
+    #     serviceName: ssl-redirect
+    #     servicePort: use-annotation
+    # - backend:
+    #     serviceName: >-
+    #       {{ template "jenkins.fullname" . }}
+    #     # Don't use string here, use only integer value!
+    #     servicePort: 8080
+    # For Kubernetes v1.14+, use 'networking.k8s.io/v1beta1'
+    # For Kubernetes v1.19+, use 'networking.k8s.io/v1'
+    apiVersion: "networking.k8s.io/v1"
+    labels: {}
+    annotations:
+      cert-manager.io/cluster-issuer: letsencrypt-prod
+    # kubernetes.io/ingress.class: "egress-nginx"
+    # kubernetes.io/tls-acme: "true"
+    # For Kubernetes >= 1.18 you should specify the ingress-controller via the field ingressClassName
+    # See https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/#specifying-the-class-of-an-ingress
+    ingressClassName: egress-nginx
+    # Set this path to jenkinsUriPrefix above or use annotations to rewrite path
+    # path: "/jenkins"
+    # configures the hostname e.g. jenkins.example.com
+    hostName: jenkins.coffeemart.xyz
+    tls:
+      - secretName: jenkins-tls
+        hosts:
+          - jenkins.coffeemart.xyz
