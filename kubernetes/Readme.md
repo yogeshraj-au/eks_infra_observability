@@ -17,5 +17,5 @@ kubectl apply -f externaldns.yaml -n external-dns
 # Install clusterissuer
 
 ```
-kubectl apply -f clusterissuer
+kubectl apply -f clusterissuer.yaml
 ```
