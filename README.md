@@ -3,6 +3,8 @@ This repo contains config to create an eks cluster and add-ons such as coredns, 
 
 ![Architecture](Aggregated_Logging_and_Metrics.png)
 
+[Blog post](https://medium.com/@yogeshraj-au/unveiling-the-journey-orchestrating-observability-for-amazon-eks-276385646be5)
+
 Tech Stack:
 
 - Jenkins
